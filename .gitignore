@@ -1,0 +1,4 @@
+*.sln
+*.class
+/build
+/nbproject
