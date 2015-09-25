@@ -19,6 +19,7 @@ import javax.swing.ListSelectionModel;
 
 public class TelaChatUDP extends javax.swing.JFrame {
 
+    private boolean conectado = false;
     static String ip = "";
     static int porta;
     ArrayList<String> arr;
@@ -74,9 +75,6 @@ public class TelaChatUDP extends javax.swing.JFrame {
         txtAreaServ = new javax.swing.JTextArea();
         jScrollPane5 = new javax.swing.JScrollPane();
         txtAreaUsu = new javax.swing.JTextArea();
-        jPanel18 = new javax.swing.JPanel();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        txOnlines = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -138,7 +136,7 @@ public class TelaChatUDP extends javax.swing.JFrame {
                     .addComponent(btConectar)
                     .addComponent(jRadioButtonTCP6)
                     .addComponent(jRadioButtonUDP6))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -211,24 +209,6 @@ public class TelaChatUDP extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel18.setBorder(javax.swing.BorderFactory.createTitledBorder("Onlines"));
-
-        txOnlines.setEditable(false);
-        txOnlines.setColumns(20);
-        txOnlines.setRows(5);
-        jScrollPane7.setViewportView(txOnlines);
-
-        javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
-        jPanel18.setLayout(jPanel18Layout);
-        jPanel18Layout.setHorizontalGroup(
-            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane7)
-        );
-        jPanel18Layout.setVerticalGroup(
-            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane7)
-        );
-
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
@@ -238,21 +218,16 @@ public class TelaChatUDP extends javax.swing.JFrame {
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel15Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel15Layout.createSequentialGroup()
-                        .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
@@ -288,19 +263,48 @@ public class TelaChatUDP extends javax.swing.JFrame {
 
 
     private void btConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btConectarActionPerformed
-        ThreadUDP();
+
+        if (conectado == false) {
+            String name = txtNome.getText();
+            if (!name.isEmpty()) {
+
+                ThreadUDP();
+
+                txtIp.setEnabled(false);
+                txtPorta.setEnabled(false);
+                txtNome.setEnabled(false);
+
+                txtAreaServ.setEnabled(true);
+                txtAreaUsu.setEnabled(true);
+                btConectar.setText("Desconectar");
+            } else {
+                JOptionPane.showMessageDialog(this, "Nome não pode ser vazio", "Nome", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            ThreadUDP();
+            txtIp.setEnabled(true);
+            txtPorta.setEnabled(true);
+            txtNome.setEnabled(true);
+
+            txtAreaServ.setEnabled(false);
+            txtAreaUsu.setEnabled(false);
+            btConectar.setText("Conectar");
+            conectado = false;
+
+        }
+
     }//GEN-LAST:event_btConectarActionPerformed
 
     private void jRadioButtonTCP6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButtonTCP6MouseClicked
         // TODO add your handling code here:
-        jRadioButtonTCP.setSelected(true);
-        jRadioButtonUDP.setSelected(false);
+        jRadioButtonTCP6.setSelected(true);
+        jRadioButtonUDP6.setSelected(false);
     }//GEN-LAST:event_jRadioButtonTCP6MouseClicked
 
     private void jRadioButtonUDP6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRadioButtonUDP6MouseClicked
         // TODO add your handling code here:
-        jRadioButtonTCP.setSelected(false);
-        jRadioButtonUDP.setSelected(true);
+        jRadioButtonTCP6.setSelected(false);
+        jRadioButtonUDP6.setSelected(true);
     }//GEN-LAST:event_jRadioButtonUDP6MouseClicked
 
     private void btEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEnviarActionPerformed
@@ -308,10 +312,10 @@ public class TelaChatUDP extends javax.swing.JFrame {
     }//GEN-LAST:event_btEnviarActionPerformed
 
     public static void main(String args[]) {
-        ArrayList<String> arr=new ArrayList<String>();
+        ArrayList<String> arr = new ArrayList<String>();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
+
                 new TelaChatUDP(arr).setVisible(false);
             }
         });
@@ -354,17 +358,15 @@ public class TelaChatUDP extends javax.swing.JFrame {
             }
             );
             thread.start();
-        }else{
+        } else {
             arr.remove(nomeUsuario);
-            thread.stop();
+            thread.interrupt();
         }
 
     }
 
     private void refreshOnlines() {
-        for (int j = 0; j < arr.size(); j++) {
-            txOnlines.setText(arr.get(j) + " \n");
-        }
+
         //System.out.println("lista onlines:" + message.getSetOnlines().toString());
         //Set<String> names = message.getSetOnlines();
         //names.remove(message.getName());
@@ -394,7 +396,7 @@ public class TelaChatUDP extends javax.swing.JFrame {
     public static byte[] criarStringConsole(String nomeUsuario, String mensagem) {
         byte[] mensagemConsole = new byte[140];
 
-        StringBuffer stringMensagem = new StringBuffer();        
+        StringBuffer stringMensagem = new StringBuffer();
         stringMensagem.append(nomeUsuario);
         stringMensagem.append(" diz: ");
         stringMensagem.append(mensagem);
@@ -486,93 +488,24 @@ public class TelaChatUDP extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btConecta;
-    private javax.swing.JButton btConecta1;
-    private javax.swing.JButton btConecta2;
-    private javax.swing.JButton btConecta3;
-    private javax.swing.JButton btConecta4;
-    private javax.swing.JButton btConecta5;
     private javax.swing.JButton btConectar;
     private javax.swing.JButton btEnviar;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.ButtonGroup buttonGroup4;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
-    private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
-    private javax.swing.JPanel jPanel18;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
-    private javax.swing.JRadioButton jRadioButtonTCP;
-    private javax.swing.JRadioButton jRadioButtonTCP1;
-    private javax.swing.JRadioButton jRadioButtonTCP2;
-    private javax.swing.JRadioButton jRadioButtonTCP3;
-    private javax.swing.JRadioButton jRadioButtonTCP4;
-    private javax.swing.JRadioButton jRadioButtonTCP5;
     private javax.swing.JRadioButton jRadioButtonTCP6;
-    private javax.swing.JRadioButton jRadioButtonUDP;
-    private javax.swing.JRadioButton jRadioButtonUDP1;
-    private javax.swing.JRadioButton jRadioButtonUDP2;
-    private javax.swing.JRadioButton jRadioButtonUDP3;
-    private javax.swing.JRadioButton jRadioButtonUDP4;
-    private javax.swing.JRadioButton jRadioButtonUDP5;
     private javax.swing.JRadioButton jRadioButtonUDP6;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JTextField tfNome;
-    private javax.swing.JTextField tfNome1;
-    private javax.swing.JTextField tfNome2;
-    private javax.swing.JTextField tfNome3;
-    private javax.swing.JTextField tfNome4;
-    private javax.swing.JTextField tfNome5;
-    private javax.swing.JTextField tfPorta;
-    private javax.swing.JTextField tfPorta1;
-    private javax.swing.JTextField tfPorta2;
-    private javax.swing.JTextField tfPorta3;
-    private javax.swing.JTextField tfPorta4;
-    private javax.swing.JTextField tfPorta5;
-    private javax.swing.JTextField tfServer;
-    private javax.swing.JTextField tfServer1;
-    private javax.swing.JTextField tfServer2;
-    private javax.swing.JTextField tfServer3;
-    private javax.swing.JTextField tfServer4;
-    private javax.swing.JTextField tfServer5;
-    private javax.swing.JTextArea txOnlines;
     private javax.swing.JTextArea txtAreaServ;
     private javax.swing.JTextArea txtAreaUsu;
     private javax.swing.JTextField txtIp;
