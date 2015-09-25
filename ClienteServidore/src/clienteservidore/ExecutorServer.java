@@ -6,16 +6,20 @@
 package clienteservidore;
 
 import com.redes.app.service.ServidorService;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author JMMCC
  */
 public class ExecutorServer extends Thread {
-
+    public boolean tcp;
     @Override
-    public void run() {
-           new ServidorService(5555);
+    public void run() {                      
+        new ServidorService(5555,tcp);                      
+    }
+    public ExecutorServer(boolean t){
+        tcp=t;
     }
     
 }

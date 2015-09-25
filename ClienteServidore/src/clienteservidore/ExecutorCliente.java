@@ -11,8 +11,8 @@ import com.redes.app.gui.Messenger;
  *
  * @author JMMCC
  */
-public class ExecutorCliente extends Thread {
-
+public class ExecutorCliente extends Thread {    
+    public boolean tcp;
     @Override
     public void run() {
           /* Set the Nimbus look and feel */
@@ -42,11 +42,14 @@ public class ExecutorCliente extends Thread {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Messenger m = new Messenger();
+                Messenger m = new Messenger(tcp);                
                 m.setLocationRelativeTo(null);
                 m.setVisible(true);
             }
         });
+    }
+    public ExecutorCliente(boolean t){
+        tcp=t;
     }
     
 }
