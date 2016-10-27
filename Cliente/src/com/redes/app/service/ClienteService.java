@@ -15,11 +15,13 @@ import java.util.logging.Logger;
 /**
  *
  * @author JM
+ * Classe que controla o cliente
  */
 public class ClienteService {
     private Socket socket;
     private ObjectOutputStream output;
     
+    // metodo que é invocado para efetuar a conexão do cliente a um servidor padrão
     public Socket connect(){
         try {
             this.socket = new Socket("localhost",5555);
@@ -29,6 +31,7 @@ public class ClienteService {
         }
         return socket;
     }
+    // metodo que é invocado para efetuar a conexão do cliente, que recebe como parametro o endereço do servidor e a porta
     public Socket connect(String server, int port) throws IOException{
         try {
             System.out.println(server+":"+port);
@@ -40,6 +43,8 @@ public class ClienteService {
         }
         return socket;
     }
+    
+    // função que recebe a mensagem que será enviada, essa mensagem pode conter ou não um destinatario
     public void send(ChatMessage message){
         try {
             output.writeObject(message);
