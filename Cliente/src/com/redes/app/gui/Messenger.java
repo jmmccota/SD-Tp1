@@ -24,7 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 
 /**
- *
+ * tela do bate papo
  * @author JM
  */
 public class Messenger extends javax.swing.JFrame {
@@ -39,13 +39,14 @@ public class Messenger extends javax.swing.JFrame {
 
     /**
      * Creates new form Messenger
+     * inicialização padrão, tcp
      */
     public Messenger() {
         initComponents();
         jRadioButtonTCP.setSelected(true);
         conectado = false;
     }
-
+    // inicialização caso seja tcp(true) udp(false)
     public Messenger(boolean t) {
         initComponents();
         tcp = t;
@@ -60,11 +61,11 @@ public class Messenger extends javax.swing.JFrame {
         jRadioButtonTCP.setEnabled(false);
         jRadioButtonUDP.setEnabled(false);
     }
-
+    // thread que ficará escutando as respostas do servidor
     private class ListenerSocket implements Runnable {
 
         private ObjectInputStream input;
-
+        // recebe o socket que ficará escutando
         public ListenerSocket(Socket socket) {
             try {
                 input = new ObjectInputStream(socket.getInputStream());
@@ -72,7 +73,7 @@ public class Messenger extends javax.swing.JFrame {
                 Logger.getLogger(ListenerSocket.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
+        // para o caso de udp recebe o socket multicast, os datagramas e as strings com as mensagens
         public ListenerSocket(MulticastSocket socketm, DatagramPacket dg, String str) throws IOException {
             byte[] dados = new byte[140];
             MulticastSocket msocket;
@@ -83,7 +84,7 @@ public class Messenger extends javax.swing.JFrame {
             msocket.receive(datagrama);
 
         }
-
+        // execução para o listener
         @Override
         public void run() {
             ChatMessage message = null;
@@ -110,7 +111,7 @@ public class Messenger extends javax.swing.JFrame {
         }
 
     }
-
+    // quando conectar manda a mensagem de boas vindas para o servidor ou para os outros usuarios
     private void connected(ChatMessage message) {
         if (message.getText() != null) {
             if (message.getText().equals("NO")) {
@@ -132,7 +133,7 @@ public class Messenger extends javax.swing.JFrame {
 
         JOptionPane.showMessageDialog(this, "Bem vindo " + tfNome.getText(), "Conectado", JOptionPane.INFORMATION_MESSAGE);
     }
-
+    // efeuta a desconexão
     private void disconnected() {
         //  try {
         //  socket.close();
@@ -151,12 +152,12 @@ public class Messenger extends javax.swing.JFrame {
 //            Logger.getLogger(Messenger.class.getName()).log(Level.SEVERE, null, ex);
 //        }
     }
-
+    // exibe a mensagem na tela
     private void receive(ChatMessage message) {
         txtAreaReceive.append(message.getName() + " diz: " + message.getText() + "\n");
 
     }
-
+    // atualiza a lista de clientes online
     private void refreshOnlines(ChatMessage message) {
         System.out.println("lista onlines:" + message.getSetOnlines().toString());
         Set<String> names = message.getSetOnlines();
@@ -405,7 +406,7 @@ public class Messenger extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>                        
-
+    // click do botão de conexão
     private void btConectaActionPerformed(java.awt.event.ActionEvent evt) {
         if (conectado == false) {
             String name = tfNome.getText();
@@ -449,7 +450,7 @@ public class Messenger extends javax.swing.JFrame {
         }
 
     }
-
+    // click do botão de envio de mensagem
     private void btEnviaActionPerformed(java.awt.event.ActionEvent evt) {
         String text = txtAreaSend.getText();
         String name = message.getName();
@@ -470,13 +471,13 @@ public class Messenger extends javax.swing.JFrame {
         txtAreaSend.setText("");
 
     }
-
+    // evitar multiplos cliques em radio button
     private void jRadioButtonTCPMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
         jRadioButtonTCP.setSelected(true);
         jRadioButtonUDP.setSelected(false);
     }
-
+    // evitar multiplos cliques em radio button
     private void jRadioButtonUDPMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
         jRadioButtonTCP.setSelected(false);
